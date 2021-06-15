@@ -10,7 +10,10 @@ let taskList={
         timeEnd:'15:55', /* text from input type=time */
         category:1,/* a number that represents category (we can use an external obj for this list)
         a category can be used for highlighting or to split tasks into groups */
-        isDone:false, /* flag to mark it as done */
+        currentState:0, /* a number that represents current state of the Task
+        0 - Todo
+        1 - in progress
+        3 - done */
     /*  isVisible:true, // do we need a flag to hide a task??? */
     },
     ID1623744856218:{ /* ID can be generated using  generateId() */
@@ -23,10 +26,13 @@ let taskList={
         timeEnd:'15:55', /* text from input type=time */
         category:1,/* a number that represents category (we can use an external obj for this list)
         a category can be used for highlighting or to split tasks into groups */
-        isDone:false, /* flag to mark it as done */
-    }, 
-};
+        currentState:0, /* a number that represents current state of the Task
+        0 - Todo
+        1 - in progress
+        3 - done */
+    },
 
+};
 
 /* Generates a uniqe string using Date object so every task will have a uniqe ID */
 function generateId() {
@@ -56,9 +62,6 @@ taskList[generateId()]={
     isDone:false,
 };
 */
-
-
-
 
 /* Deleting a Task from TaskList (ID) */
 function deleteTaskFromList(taskID) {
