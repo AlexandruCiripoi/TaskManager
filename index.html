@@ -220,10 +220,23 @@
                 <input type="time" name="time" id="timeEnd">
               </div>
             </div>
+            <div class="row">
+              <div class="col">
+                <label for="categories">Choose a category:</label>
+              </div>
+              <div class="col">
+                <select name="categories" id="categoriesDropDown">
+                  <!-- auto fills by JS -->
+                </select> 
+                <input type="hidden" id="currentState" name="currentState" value="0"><!-- used for saving value when editing -->
+              </div>
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-primary" id="btnSaveNewTask">Add</button>
+            <button type="button" class="btn btn-primary d-none" id="btnEditTask">Save changes</button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary d-none" id="btnDeleteTask">Delete</button>
           </div>
         </div>
       </div>
