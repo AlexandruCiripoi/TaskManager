@@ -73,13 +73,28 @@ document.addEventListener('click',function(e){
  });
 
 
-/* find the nodes to work with */
+/* ========================================================== */
 const captionField = document.getElementById('caption');
 const descriptionField = document.getElementById('description');
 const dateStartField = document.getElementById('dateStart');
 const timeStartField = document.getElementById('timeStart');
 const dateEndField = document.getElementById('dateEnd');
 const timeEndField = document.getElementById('timeEnd');
+const btnSaveNewTask = document.getElementById('btnSaveNewTask');
+btnSaveNewTask.addEventListener('click',btnClickAddNewTask);
+
+//this const is used for opening and closing modal window
+const modalWindowAddNewTask = new bootstrap.Modal(document.getElementById('modalWindowAddNewTask'), {keyboard: false});
+//modalWindowAddNewTask.toggle() - to open amd close it
+
+/* ========================================================== */
+//labels and buttons for EDIT / ADD
+const addNewTaskLabel = document.getElementById('staticBackdropLabel'); //We will need to change this label
+const btnEditTask = document.getElementById('btnEditTask'); //We will need to toggle "invisible" class on it and make a function to save changes when we press it
+const btnDeleteTask = document.getElementById('btnDeleteTask');//We will need to toggle "invisible" class on it and make a function to delete task when we press it
+// btnSaveNewTask is already defined above and We will need to toggle "invisible" class on it 
+/* ========================================================== */
+
 // todo - delete next const
 const outputField = document.getElementById('output-tasks');
 //----
@@ -91,13 +106,7 @@ const doneDiv = document.getElementById('doneDiv');
 //END DIVS to output data
 
 
-/* Buttons */
-const btnSaveNewTask = document.getElementById('btnSaveNewTask');
-btnSaveNewTask.addEventListener('click',btnClickAddNewTask);
 
-const modalWindowAddNewTask = new bootstrap.Modal(document.getElementById('modalWindowAddNewTask'), {
-    keyboard: false
-  })
 
 
 // const btnReadFromLocalStorage = document.getElementById('btnReadFromLocalStorage');
@@ -116,12 +125,17 @@ showTaskList(taskList);
 
 /* Functions needed */
 
+
+
+
 function readFromLocalStorage() {
     console.log('Reading list from local storage.');
     const savedData = theStorage.getItem('TaskList'); 
     if (!savedData){
+        console.log('No data in storage.');
         return {}
     }
+    console.log('Data found.');
     return JSON.parse(savedData);
 }
 
@@ -163,9 +177,9 @@ function btnClickRemoveTask(taskID) {
     showTaskList(taskList,outputField);
 }
 
-function btnClickEditTask(taskID) {
-    console.log('editTask',taskID)
-}
+
+
+
 
 function listToConsole() {
     console.log(taskList);
@@ -342,3 +356,21 @@ function splitByState(taskList) {
 //     console.log(`dateStart is ${taskList[task].dateStart}`);
 //     console.log(`dateEnd ${taskList[task].dateEnd}`);
 // }
+
+
+
+
+/* ========================================================== */
+/* If we click on Edit button this function will run */
+function btnClickEditTask(taskID) {
+    console.log('editTask',taskID);
+    /* you can edit task list by 
+    taskList[taskID].caption = "new caption";
+    taskList[taskID].description = "new description";
+    and so on...!
+
+
+    modalWindowAddNewTask.toggle() - call it to toggle modal
+    */
+
+}
