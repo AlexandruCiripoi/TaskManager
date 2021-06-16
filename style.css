@@ -1,3 +1,11 @@
 .sidebar{
     min-height: 100vh;
 }
+
+td.details-control {
+    background: url('../resources/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.details td.details-control {
+    background: url('../resources/details_close.png') no-repeat center center;
+}
