@@ -1,56 +1,12 @@
 /* variables */
-let taskList={
-    ID1623744856709:{ /* ID can be generated using  generateId() */
-        caption:'some caption', /* text from text field */
-        description:'some description', /* text from text field */
-        dateStart:'2021-06-20', /* text from input type=date */
-        /* dates should be converted to toLocaleDateString() using new Date obj */
-        timeStart:'15:55', /* text from input type=time */
-        dateEnd:'2021-06-24', /* text from input type=date */
-        timeEnd:'15:55', /* text from input type=time */
-        category:1,/* a number that represents category (we can use an external obj for this list)
-        a category can be used for highlighting or to split tasks into groups */
-        currentState:0, /* a number that represents current state of the Task
-        0 - Todo
-        1 - in progress
-        2 - done */
-    },
-    ID1623744856218:{ /* ID can be generated using  generateId() */
-        caption:'1Create a GitHub repository', /* text from text field */
-        description:'And decide who does which part', /* text from text field */
-        dateStart:'2021-06-15', /* text from input type=date */
-        /* dates should be converted to toLocaleDateString() using new Date obj */
-        timeStart:'11:00', /* text from input type=time */
-        dateEnd:'2021-06-24', /* text from input type=date */
-        timeEnd:'15:55', /* text from input type=time */
-        category:1,/* a number that represents category (we can use an external obj for this list)
-        a category can be used for highlighting or to split tasks into groups */
-        currentState:1, /* a number that represents current state of the Task
-        0 - Todo
-        1 - in progress
-        2 - done */
-    },
-    ID1633744856218:{ /* ID can be generated using  generateId() */
-        caption:'2Create a GitHub repository', /* text from text field */
-        description:'And decide who does which part', /* text from text field */
-        dateStart:'2021-06-15', /* text from input type=date */
-        /* dates should be converted to toLocaleDateString() using new Date obj */
-        timeStart:'11:00', /* text from input type=time */
-        dateEnd:'2021-06-24', /* text from input type=date */
-        timeEnd:'15:55', /* text from input type=time */
-        category:1,/* a number that represents category (we can use an external obj for this list)
-        a category can be used for highlighting or to split tasks into groups */
-        currentState:2, /* a number that represents current state of the Task
-        0 - Todo
-        1 - in progress
-        2 - done */
-    },
-
-};
+let taskList={};
 let theStorage = window.localStorage;
 
+// Use next
+// const myList = JSON.parse(localStorage.getItem('list')) || []
 
-//fill up categories
+
+/* ============ pre-defined categories ============ */
 const categories = {
     0:'No category',
     1:'Learning',
@@ -59,21 +15,17 @@ const categories = {
     4:'Important',
     5:'Not important',
 };
-const categoriesDropDown = document.getElementById('categoriesDropDown');
+/* categoriesDropDown menu on the page 
+use categoriesDropDown.value OR parseInt(categoriesDropDown.value) to get the value */
+const categoriesDropDown = document.getElementById('categoriesDropDown'); 
+/* Populate categories on page */
 for (let category in categories){
     categoriesDropDown.innerHTML+=`<option value="${category}">${categories[category]}</option>`;
 }
-
-
-document.addEventListener('click',function(e){
-    if(e.target && e.target.dataset.btnType && e.target.dataset.taskId){
-        if (e.target.dataset.btnType==='removeTask')btnClickRemoveTask(e.target.dataset.taskId);
-        if (e.target.dataset.btnType==='editTask')btnClickEditTask(e.target.dataset.taskId);
-      }
- });
-
-
 /* ========================================================== */
+
+
+/* ============ get the fields from ADD/EDIT task modal window ============ */
 const captionField = document.getElementById('caption');
 const descriptionField = document.getElementById('description');
 const dateStartField = document.getElementById('dateStart');
@@ -81,53 +33,42 @@ const timeStartField = document.getElementById('timeStart');
 const dateEndField = document.getElementById('dateEnd');
 const timeEndField = document.getElementById('timeEnd');
 const btnSaveNewTask = document.getElementById('btnSaveNewTask');
-btnSaveNewTask.addEventListener('click',btnClickAddNewTask);
-
-//this const is used for opening and closing modal window
-const modalWindowAddNewTask = new bootstrap.Modal(document.getElementById('modalWindowAddNewTask'), {keyboard: false});
-//modalWindowAddNewTask.toggle() - to open amd close it
-
-/* ========================================================== */
-//labels and buttons for EDIT / ADD
 const addNewTaskLabel = document.getElementById('staticBackdropLabel'); //We will need to change this label
 const btnEditTask = document.getElementById('btnEditTask'); //We will need to toggle "invisible" class on it and make a function to save changes when we press it
 const btnDeleteTask = document.getElementById('btnDeleteTask');//We will need to toggle "invisible" class on it and make a function to delete task when we press it
-// btnSaveNewTask is already defined above and We will need to toggle "invisible" class on it 
-/* ========================================================== */
 
-// todo - delete next const
-const outputField = document.getElementById('output-tasks');
-//----
+/* ============ this const is used for opening and closing modal window ============ */
+/* modalWindowAddNewTask.toggle() - to open amd close it */
+const modalWindowAddNewTask = new bootstrap.Modal(document.getElementById('modalWindowAddNewTask'), {keyboard: false});
 
-//find DIVS to output data
+/* ============  DIVS to output data ============ */
 const toDoDiv = document.getElementById('toDoDiv');
 const inProgressDiv = document.getElementById('inProgressDiv');
 const doneDiv = document.getElementById('doneDiv');
-//END DIVS to output data
+/* ========================================================== */
 
 
+taskList=readFromLocalStorage(); //try to load data from local storage
+showTaskList(taskList); //put the data to page
 
 
+/* ============ Event listeners ============ */
+/* If user clicked on Add button in Add-new-task modal window */
+btnSaveNewTask.addEventListener('click',btnClickAddNewTask);
 
-// const btnReadFromLocalStorage = document.getElementById('btnReadFromLocalStorage');
-// btnReadFromLocalStorage.addEventListener('click',readFromLocalStorage);
+/* listen to every click on the page and when we click on "special" buttons - call a function */
+/* theese special buttons have dataset attributes */
+document.addEventListener('click',function(e){
+    if(e.target && e.target.dataset.btnType && e.target.dataset.taskId){
+        if (e.target.dataset.btnType==='taskToProgress')btnClickMoveTaskToProgress(e.target.dataset.taskId);
+        if (e.target.dataset.btnType==='editTask')btnClickEditTask(e.target.dataset.taskId);
+        if (e.target.dataset.btnType==='taskBackToDo')btnClickMoveTaskBackToDo(e.target.dataset.taskId);
+        if (e.target.dataset.btnType==='taskToDone')btnClickMoveTaskToDone(e.target.dataset.taskId);
+      }
+});
+/* ========================================================== */
 
-// const btnListToConsole = document.getElementById('btnListToConsole');
-// btnListToConsole.addEventListener('click',listToConsole);
-
-// const btnListToLocalStorage = document.getElementById('btnListToLocalStorage');
-// btnListToLocalStorage.addEventListener('click',saveListToLocalStorage);
-
-
-taskList=readFromLocalStorage();
-showTaskList(taskList);
-
-
-/* Functions needed */
-
-
-
-
+/* Functions */
 function readFromLocalStorage() {
     console.log('Reading list from local storage.');
     const savedData = theStorage.getItem('TaskList'); 
@@ -137,45 +78,38 @@ function readFromLocalStorage() {
     }
     console.log('Data found.');
     return JSON.parse(savedData);
-}
+};
 
 function saveListToLocalStorage(taskList) {
     theStorage.setItem('TaskList',JSON.stringify(taskList));
     console.log('List was saved to local storage.')
-}
+};
 
 
-/* listen to every click on the page and when we click on "special" buttons - call a function */
-document.addEventListener('click',function(e){
-    if(e.target && e.target.dataset.btnType && e.target.dataset.taskId){
-        if (e.target.dataset.btnType==='taskToProgress')btnClickMoveTaskToProgress(e.target.dataset.taskId);
-        if (e.target.dataset.btnType==='editTask')btnClickEditTask(e.target.dataset.taskId);
-        if (e.target.dataset.btnType==='taskBackToDo')btnClickMoveTaskBackToDo(e.target.dataset.taskId);
-        if (e.target.dataset.btnType==='taskToDone')btnClickMoveTaskToDone(e.target.dataset.taskId);
-      }
- });
 
+/* function called when "Change-Status" buttons pressed */
 function btnClickMoveTaskToProgress(taskID) {
-    taskList[taskID].currentState=1;
-    saveListToLocalStorage(taskList)
-    showTaskList(taskList);
-}
+    taskList[taskID].currentState=1; //just set currentState of taskID in taskList to 1 (in progress)
+    saveListToLocalStorage(taskList); //Save the tasklist to local storage
+    showTaskList(taskList);//redraw all the items
+};
 
 function btnClickMoveTaskToDone(taskID) {
-    taskList[taskID].currentState=2;
-    saveListToLocalStorage(taskList)
-    showTaskList(taskList);
-}
+    taskList[taskID].currentState=2;//just set currentState of taskID in taskList to 2 (done)
+    saveListToLocalStorage(taskList);//Save the tasklist to local storage
+    showTaskList(taskList);//redraw all the items
+};
+
 function btnClickMoveTaskBackToDo(taskID) {
-    taskList[taskID].currentState=0;
-    saveListToLocalStorage(taskList)
-    showTaskList(taskList);
-}
+    taskList[taskID].currentState=0;//just set currentState of taskID in taskList to 0 (todo)
+    saveListToLocalStorage(taskList);//Save the tasklist to local storage
+    showTaskList(taskList);//redraw all the items
+};
 
 function btnClickRemoveTask(taskID) {
     deleteTaskFromList(taskList,taskID);
-    showTaskList(taskList,outputField);
-}
+    showTaskList(taskList);
+};
 
 
 
@@ -186,42 +120,42 @@ function listToConsole() {
 }
 
 
-  
+/* function called when a ADD button pressed */
 function btnClickAddNewTask() {
-    addNewTaskToTaskList(taskList);
-    saveListToLocalStorage(taskList);
-    showTaskList(taskList);
-    modalWindowAddNewTask.toggle() //close moddal window
-}
+    addNewTaskToTaskList(); //add Data from inputs to TaskList
+    saveListToLocalStorage(taskList); //Save the tasklist to local storage
+    showTaskList(taskList); //redraw all the items including new one
+    modalWindowAddNewTask.toggle() //close modal window
+};
 
-function addNewTaskToTaskList(taskList) {
+
+/* function for adding a new task to tasklist with values from inputs  */
+function addNewTaskToTaskList() {
     taskList[generateId()]={ /* 1. generating ID.  2. creating a new task inside the taskList obj */
-        caption:captionField.value,
+        caption:captionField.value, //add Data (values) from inputs to task-object
         description:descriptionField.value,
         dateStart:dateStartField.value,
         timeStart:timeStartField.value,
         dateEnd:dateEndField.value,
         timeEnd:timeEndField.value,
-        category:parseInt(categoriesDropDown.value),
+        category:parseInt(categoriesDropDown.value),// category should be saved as a number, not a string
         currentState:0,
     };
-}
+};
 
+/* function for filling up DIVs with template styles and data from TaskList */
 function showTaskList(taskList) {
-    let [state0,state1,state2] = splitByState(taskList);
-    toDoDiv.innerHTML="";
-    inProgressDiv.innerHTML="";
-    doneDiv.innerHTML="";
-    for (let task in state0){
-        toDoDiv.innerHTML+=prepareCard(task,state0[task]);
+    let [state0,state1,state2] = splitByState(taskList); //Split into 3 tasklists based on currentState value
+    fillTheDivs(toDoDiv,state0); // Put all the tasks with state0 to toDoDiv
+    fillTheDivs(inProgressDiv,state1);// Put all the tasks with state1 to inProgressDiv
+    fillTheDivs(doneDiv,state2);// Put all the tasks with state2 to doneDiv
+};
+/* DRY - We can use FOR loop 3 times or write a function for that */
+function fillTheDivs(divId,taskList) {
+    divId.innerHTML=""; //clear DIV
+    for (let task in taskList){ //loop thru tasklist
+        divId.innerHTML+=prepareCard(task,taskList[task]);//put data, which we get from prepareCard function into this div
     }
-    for (let task in state1){
-        inProgressDiv.innerHTML+=prepareCard(task,state1[task]);
-    }
-    for (let task in state2){
-        doneDiv.innerHTML+=prepareCard(task,state2[task]);
-    }
-
 }
 
 
@@ -232,10 +166,7 @@ function categoryToText(category) {
 
 function prepareCard(taskID,taskData) {
     //border color
-    console.log('taskData');
-    // console.log(taskData);
     const borderColor=taskData.category===0 ? "dark" : taskData.category===1 ? "warning" : taskData.category===2 ? "info" : taskData.category===3 ? "success" : taskData.category===4 ? "danger" : "light";
-
     const taskCategory=categoryToText(taskData.category);
     const taskCaption=taskData.caption;
     const taskDescription=taskData.description;
@@ -261,7 +192,7 @@ function prepareCard(taskID,taskData) {
     };
 
 
-    const cardTemplate = `
+    return `
     <!-- CARDS -->
     <!-- Card begin (row) -->
     <div class="row m-1">
@@ -316,22 +247,19 @@ function prepareCard(taskID,taskData) {
 
 
       <!-- END CARDS -->
-    `;
-
-
-    return cardTemplate
-}
+    `
+};
 
 
 /* Generates a uniqe string using Date object so every task will have a uniqe ID */
 function generateId() {
     return `ID${Date.now().toString()}` /* Returns a unique string */
-}
+};
 
 /* Deleting a Task from TaskList (ID) */
 function deleteTaskFromList(taskList,taskID) {
     delete taskList[taskID]; 
-}
+};
 
 /* function takes a taskList and returns 3 list objects splitted by state 0/1/2 
 Usage:
@@ -359,7 +287,7 @@ function splitByState(taskList) {
 
 
 
-
+/* ========================================================== */
 /* ========================================================== */
 /* If we click on Edit button this function will run */
 function btnClickEditTask(taskID) {
