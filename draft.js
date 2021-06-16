@@ -13,8 +13,7 @@ let taskList={
         currentState:0, /* a number that represents current state of the Task
         0 - Todo
         1 - in progress
-        3 - done */
-    /*  isVisible:true, // do we need a flag to hide a task??? */
+        2 - done */
     },
     ID1623744856218:{ /* ID can be generated using  generateId() */
         caption:'Create a GitHub repository', /* text from text field */
@@ -29,9 +28,8 @@ let taskList={
         currentState:0, /* a number that represents current state of the Task
         0 - Todo
         1 - in progress
-        3 - done */
+        2 - done */
     },
-
 };
 
 /* Generates a uniqe string using Date object so every task will have a uniqe ID */
@@ -48,7 +46,7 @@ taskList[generateId()]={ /* 1. generating ID.  2. creating a new task inside the
     dateEnd:'2021-12-31',
     timeEnd:'12:00',
     category:0,
-    isDone:false,
+    currentState:0,
 };
 /* //Example with inputs on HTML page
 taskList[generateId()]={
@@ -59,13 +57,30 @@ taskList[generateId()]={
     dateEnd:'2021-12-31',
     timeEnd:'12:00',
     category:0,
-    isDone:false,
+    currentState:0,
 };
 */
 
 /* Deleting a Task from TaskList (ID) */
 function deleteTaskFromList(taskID) {
     delete taskList[taskID]; 
+}
+
+
+/* function takes a taskList and returns 3 list objects splitted by state 0/1/2 
+Usage:
+let [state0,state1,state2] = splitByState(taskList);
+*/
+function splitByState(taskList) { 
+    let state0;
+    let state1;
+    let state2;
+    for (let task in taskList){
+        if (taskList[task].currentState===0)state0[task]=taskList[task];
+        if (taskList[task].currentState===1)state1[task]=taskList[task];
+        if (taskList[task].currentState===2)state2[task]=taskList[task];
+    }
+    return [state0,state1,state2]
 }
 
 
