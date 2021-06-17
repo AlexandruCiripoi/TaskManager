@@ -1,20 +1,13 @@
 /* variables */
 let taskList={};
 let theStorage = window.localStorage;
-const dateObj = new Date();
+
 // Use next
 // const myList = JSON.parse(localStorage.getItem('list')) || []
 
 
 /* ============ pre-defined categories ============ */
-const categories = {
-    0:'No category',
-    1:'Learning',
-    2:'Eating',
-    3:'Exercises',
-    4:'Important',
-    5:'Not important',
-};
+import { categories } from "./settings.js";
 /* categoriesDropDown menu on the page 
 use categoriesDropDown.value OR parseInt(categoriesDropDown.value) to get the value */
 const categoriesDropDown = document.getElementById('categoriesDropDown'); 

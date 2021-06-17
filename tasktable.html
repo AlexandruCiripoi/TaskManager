@@ -4,50 +4,122 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.css">
     <link rel="stylesheet" href="style.css">
-    <title>ToDo List</title>
+    <title>ToDo List -> Table view</title>
 </head>
 <body>
-    <div id="table_wrapper">
-        <table id="table" class="cell-border" style="width:100%">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Caption</th>
-                    <th>Start Date</th>
-                    <th>Time Start</th>
-                    <th>End Date</th>
-                    <th>Time End</th>
-                    <th>Category</th>
-                    <th>State</th>
+    <div class="container-fluid">
+        <div class="row">
 
-                </tr>
-            </thead>
-            <tfoot>
-                <tr>
-                    <th></th>
-                    <th>Caption</th>
-                    <th>Start Date</th>
-                    <th>Time Start</th>
-                    <th>End Date</th>
-                    <th>Time End</th>
-                    <th>Category</th>
-                    <th>State</th>
+            
+                        <!-- Right part of the screen -->
+                        <div class="col-lg-10 col-md-8 col-sm-8 order-sm-2">
+                            <!-- Header on top -->
+                              <div class="row mt-4">
+                                  <div class="col">
+                                      <div class="h2">View your tasks in a table</div>
+                                  </div>
 
-                </tr>
-            </tfoot>
-        </table>
-    </div>
+                              </div>
+              
+                              <!-- Content of the page -->
+                              <div class="row mt-4">
 
+                                    <div id="table_wrapper">
+                                        <table id="table" class="cell-border" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Caption</th>
+                                                    <th>Start Date</th>
+                                                    <th>Time Start</th>
+                                                    <th>End Date</th>
+                                                    <th>Time End</th>
+                                                    <th>Category</th>
+                                                    <th>State</th>
 
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Caption</th>
+                                                    <th>Start Date</th>
+                                                    <th>Time Start</th>
+                                                    <th>End Date</th>
+                                                    <th>Time End</th>
+                                                    <th>Category</th>
+                                                    <th>State</th>
+
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                                <!-- End right part of the screen -->
+            <!-- Left part of the screen -->
+            <div class="col-lg-2 col-md-4 col-sm-4 order-sm-1">
+                <div class="d-flex flex-column flex-shrink-0 p-3 bg-light sidebar">
+                    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+                      <span class="fs-4">ToDo list</span>
+                    </a>
+                    <hr>
+                    <ul class="nav nav-pills flex-column mb-auto">
+                      <li class="nav-item">
+                        <a href="index.html" class="nav-link link-dark" aria-current="page">
+                          Task cards
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#" class="nav-link active">
+                          Task table
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#" class="nav-link link-dark" id="addTaskBtn">
+                          Add task
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#" class="nav-link link-dark">
+                          Information
+                        </a>
+                      </li>
+                    </ul>
+  
+                    <hr>
+                    <div class="dropdown">
+                      <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                        <strong>User</strong>
+                      </a>
+                      <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser1">
+                        <li><a class="dropdown-item" href="#">New project...</a></li>
+                        <li><a class="dropdown-item" href="#">Settings</a></li>
+                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Sign out</a></li>
+                      </ul>
+                    </div>
+                  </div>
+            </div>
+            <!-- End left part of the screen -->
+  
+  
+  
+  
+  
+          </div>
+      </div>
+  <!-- END Content -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
-    <script src="draft.js"></script>
-	<script src="tasktable.js"></script>
+	<script type="module" src="./tasktable.js"></script>
 </body>
 </html>
