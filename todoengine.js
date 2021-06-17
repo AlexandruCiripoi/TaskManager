@@ -1,7 +1,7 @@
 /* variables */
 let taskList={};
 let theStorage = window.localStorage;
-
+const dateObj = new Date();
 // Use next
 // const myList = JSON.parse(localStorage.getItem('list')) || []
 
@@ -36,7 +36,11 @@ const btnSaveNewTask = document.getElementById('btnSaveNewTask');
 const addNewTaskLabel = document.getElementById('staticBackdropLabel'); //We will need to change this label
 const btnEditTask = document.getElementById('btnEditTask'); //We will need to toggle "invisible" class on it and make a function to save changes when we press it
 const btnDeleteTask = document.getElementById('btnDeleteTask');//We will need to toggle "invisible" class on it and make a function to delete task when we press it
-
+const btnShowModalAddNewTask = document.getElementById('btnShowModalAddNewTask');//We will need to toggle "invisible" class on it and make a function to delete task when we press it
+const currentStateHidden = document.getElementById('currentStateHidden');
+const taskIDHidden = document.getElementById('taskIDHidden');
+const timeAccordion = document.getElementById('flush-collapseOne');
+const btnAccordion = document.getElementById('btnAccordion');
 /* ============ this const is used for opening and closing modal window ============ */
 /* modalWindowAddNewTask.toggle() - to open amd close it */
 const modalWindowAddNewTask = new bootstrap.Modal(document.getElementById('modalWindowAddNewTask'), {keyboard: false});
@@ -55,7 +59,10 @@ showTaskList(taskList); //put the data to page
 /* ============ Event listeners ============ */
 /* If user clicked on Add button in Add-new-task modal window */
 btnSaveNewTask.addEventListener('click',btnClickAddNewTask);
-
+btnShowModalAddNewTask.addEventListener('click',showModalAddNewTask);
+btnDeleteTask.addEventListener('click',btnClickDeleteTask);
+btnEditTask.addEventListener('click',btnClickSaveEditedTask);
+btnAccordion.addEventListener('click',btnAccordionClick)
 /* listen to every click on the page and when we click on "special" buttons - call a function */
 /* theese special buttons have dataset attributes */
 document.addEventListener('click',function(e){
@@ -106,14 +113,49 @@ function btnClickMoveTaskBackToDo(taskID) {
     showTaskList(taskList);//redraw all the items
 };
 
-function btnClickRemoveTask(taskID) {
-    deleteTaskFromList(taskList,taskID);
+function btnClickDeleteTask() {
+    
+    deleteTaskFromList(taskIDHidden.value);
+    saveListToLocalStorage(taskList);
     showTaskList(taskList);
+    
+    modalWindowAddNewTask.toggle(); 
 };
 
+function btnClickSaveEditedTask() {
+    console.log('editing');
+    taskList[taskIDHidden.value]={ /* 1. generating ID.  2. creating a new task inside the taskList obj */
+        caption:captionField.value, //add Data (values) from inputs to task-object
+        description:descriptionField.value,
+        dateStart:dateStartField.value,
+        timeStart:timeStartField.value,
+        dateEnd:dateEndField.value,
+        timeEnd:timeEndField.value,
+        category:parseInt(categoriesDropDown.value),// category should be saved as a number, not a string
+        currentState:0,
+    };
+    console.log(taskList);
+    showTaskList(taskList);
+    modalWindowAddNewTask.toggle();
+}
 
+function btnAccordionClick() {
+    if (!btnSaveNewTask.classList.contains('d-none') && dateStartField.value=="" && timeStartField.value=="" && dateEndField.value=="" && timeEndField.value==""){ //if modal show ADD window
+        const dateTimeNow = (new Date(Date.now() - ((new Date()).getTimezoneOffset() * 60000))).toISOString();
+        dateStartField.value = dateTimeNow.slice(0,10);
+        timeStartField.value = dateTimeNow.slice(11,16);
+        dateEndField.value = dateTimeNow.slice(0,10);
+        timeEndField.value = dateTimeNow.slice(11,16);
+    }
 
+    // console.log(timeAccordion.classList.contains('show'));
+    // console.log(timeAccordion.classList);
+    // if (timeAccordion.style.classList.contains('show')) /* is accordion open? */
+    // {
 
+    // }
+
+}
 
 function listToConsole() {
     console.log(taskList);
@@ -131,6 +173,11 @@ function btnClickAddNewTask() {
 
 /* function for adding a new task to tasklist with values from inputs  */
 function addNewTaskToTaskList() {
+    if (dateStartField.value===dateEndField.value && timeStartField.value===timeEndField.value){
+        dateEndField.value="";
+        timeEndField.value="";
+    }
+
     taskList[generateId()]={ /* 1. generating ID.  2. creating a new task inside the taskList obj */
         caption:captionField.value, //add Data (values) from inputs to task-object
         description:descriptionField.value,
@@ -139,8 +186,9 @@ function addNewTaskToTaskList() {
         dateEnd:dateEndField.value,
         timeEnd:timeEndField.value,
         category:parseInt(categoriesDropDown.value),// category should be saved as a number, not a string
-        currentState:0,
+        currentState:parseInt(currentStateHidden.value),
     };
+    console.log('Added new task to tasklist',taskList);
 };
 
 /* function for filling up DIVs with template styles and data from TaskList */
@@ -164,6 +212,10 @@ function categoryToText(category) {
     return categories[category]
 }
 
+function formatDate(date) {
+    return date === "" ? "" : new Date(date).toLocaleDateString()
+}
+
 function prepareCard(taskID,taskData) {
     //border color
     const borderColor=taskData.category===0 ? "dark" : taskData.category===1 ? "warning" : taskData.category===2 ? "info" : taskData.category===3 ? "success" : taskData.category===4 ? "danger" : "light";
@@ -171,21 +223,21 @@ function prepareCard(taskID,taskData) {
     const taskCaption=taskData.caption;
     const taskDescription=taskData.description;
     const taskTimeStart=taskData.timeStart;
-    const taskDateStart=taskData.dateStart;
+    const taskDateStart=formatDate(taskData.dateStart);
     const taskTimeEnd=taskData.timeEnd;
-    const taskDateEnd=taskData.dateEnd;
+    const taskDateEnd=formatDate(taskData.dateEnd);
 
     let addButtonsToCard = "";
-    if (taskData.currentState===0){
+    if (parseInt(taskData.currentState)===0){
         addButtonsToCard=`
         <a href="#" class="btn btn-info border border-light" data-btn-type="editTask" data-task-id="${taskID}"> Edit </a>
         <a href="#" class="btn btn-info border border-light" data-btn-type="taskToProgress" data-task-id="${taskID}"> In progress > </a>`;
-    }else if(taskData.currentState===1){
+    }else if(parseInt(taskData.currentState)===1){
         addButtonsToCard=`
         <a href="#" class="btn btn-info border border-light" data-btn-type="taskBackToDo" data-task-id="${taskID}"> < ToDo </a>
         <a href="#" class="btn btn-info border border-light" data-btn-type="editTask" data-task-id="${taskID}"> Edit </a>
         <a href="#" class="btn btn-info border border-light" data-btn-type="taskToDone" data-task-id="${taskID}"> Done > </a>`;
-    }else if(taskData.currentState===2){
+    }else if(parseInt(taskData.currentState)===2){
         addButtonsToCard=`
         <a href="#" class="btn btn-info border border-light" data-btn-type="taskToProgress" data-task-id="${taskID}"> < In progress </a>
         <a href="#" class="btn btn-info border border-light" data-btn-type="editTask" data-task-id="${taskID}"> Edit </a>`;
@@ -257,7 +309,7 @@ function generateId() {
 };
 
 /* Deleting a Task from TaskList (ID) */
-function deleteTaskFromList(taskList,taskID) {
+function deleteTaskFromList(taskID) {
     delete taskList[taskID]; 
 };
 
@@ -270,9 +322,9 @@ function splitByState(taskList) {
     let state1={};
     let state2={};
     for (let task in taskList){
-        if (taskList[task].currentState===0)state0[task]=taskList[task];
-        if (taskList[task].currentState===1)state1[task]=taskList[task];
-        if (taskList[task].currentState===2)state2[task]=taskList[task];
+        if (parseInt(taskList[task].currentState)===0)state0[task]=taskList[task];
+        if (parseInt(taskList[task].currentState)===1)state1[task]=taskList[task];
+        if (parseInt(taskList[task].currentState)===2)state2[task]=taskList[task];
     }
     return [state0,state1,state2]
 }
@@ -285,20 +337,65 @@ function splitByState(taskList) {
 //     console.log(`dateEnd ${taskList[task].dateEnd}`);
 // }
 
-
-
+function showModalAddNewTask() {
+    toggleAddModal('add');
+    timeAccordion.classList.remove('show'); //close accordion
+    captionField.value = "";
+    descriptionField.value = "";
+    dateStartField.value = "";
+    timeStartField.value = "";
+    dateEndField.value = "";
+    timeEndField.value = "";
+    categoriesDropDown.value = 0;
+    currentStateHidden.value = 0;
+    modalWindowAddNewTask.toggle(); //open modal window
+}
 /* ========================================================== */
 /* ========================================================== */
 /* If we click on Edit button this function will run */
 function btnClickEditTask(taskID) {
-    console.log('editTask',taskID);
+    // console.log('editTask',taskID);
     /* you can edit task list by 
     taskList[taskID].caption = "new caption";
     taskList[taskID].description = "new description";
     and so on...!
-
+    or fill up elements on the page by
+    captionField.value = 'some caption';
 
     modalWindowAddNewTask.toggle() - call it to toggle modal
     */
+    toggleAddModal('edit');
+    if (taskList[taskID].dateStart != "" || taskList[taskID].timeStart != "" ||taskList[taskID].timeEnd != "" ||taskList[taskID].dateEnd != ""){
+        timeAccordion.classList.add('show');
+        if (btnAccordion.classList.contains('collapsed'))btnAccordion.classList.remove('collapsed');
+    }else{
+        timeAccordion.classList.remove('show')
+        if (!btnAccordion.classList.contains('collapsed'))btnAccordion.classList.add('collapsed');
+    }
+    captionField.value = taskList[taskID].caption;
+    descriptionField.value = taskList[taskID].description;
+    dateStartField.value = taskList[taskID].dateStart;
+    timeStartField.value = taskList[taskID].timeStart;
+    timeEndField.value = taskList[taskID].timeEnd;
+    dateEndField.value = taskList[taskID].dateEnd;
+    categoriesDropDown.value = taskList[taskID].category;
+    currentStateHidden.value = taskList[taskID].currentState;
+    taskIDHidden.value = taskID;
+    modalWindowAddNewTask.toggle(); //open modal window
+}
+// toggleAddModal();
 
+function toggleAddModal(action) {
+    if (action==='edit'){
+        // console.log('you pressed Edit');
+        btnSaveNewTask.classList.add('d-none');
+        btnEditTask.classList.remove('d-none');
+        btnDeleteTask.classList.remove('d-none');
+        addNewTaskLabel.innerText="Edit or delete task";
+    }else if (action==='add'){
+        btnSaveNewTask.classList.remove('d-none');
+        btnEditTask.classList.add('d-none');
+        btnDeleteTask.classList.add('d-none');
+        addNewTaskLabel.innerText="Add a new task";
+    }
 }
