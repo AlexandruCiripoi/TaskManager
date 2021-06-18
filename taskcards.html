@@ -13,54 +13,95 @@
     <div class="container-fluid">
         <div class="row">
             
-          <!-- This code is for the ADD TASK button. If you want you can put it anywhere and uncomment it to make it work -->
-          <!-- <button type="button" class="btn btn-primary" id="btnShowModalAddNewTask">
-            Add a new task
-          </button> -->
+
+
 
 
             <!-- Right part of the screen -->
             <div class="col-lg-10 col-md-8 col-sm-8 order-sm-2">
-            <!-- ------------------------------------------- -->
-
-
-
-
-
               <!-- Header on top -->
                 <div class="row mt-4">
                     <div class="col-lg-2 col-sm-6">
-
-                      <!-- header??? -->
                         <div class="h2">Task cards</div>
                     </div>
                     <div class="col-lg-10 col-sm-6">
-                    
+                      <button type="button" class="btn btn-primary" id="btnShowModalAddNewTask"> <!--  data-bs-toggle="modal" data-bs-target="#modalWindowAddNewTask" -->
+                        Add a new task
+                      </button>
                     </div>
                 </div>
 
                 <!-- Content of the page -->
                 <div class="row mt-4">
 
-                  <div class="col">
+                  <!-- Column with tasks in status TO DO -->
+                    <div class="col-md-4">
+                        <div class="row">
+                            <div class="col">
+                                <h3>To Do</h3>
+                            </div>
+                        </div>
+
+                        <!-- row for inserting data -->
+                        <div class="row">
+                          <!-- col for inserting data -->
+                          <div class="col" id="toDoDiv">
+
+                            
+                          </div>
+                          <!-- end col for inserting data -->
+                        </div>
+                        <!-- End row for inserting data -->
+                      </div>
+                      <!-- END Column with tasks in status TO DO -->
+
+                    <!-- Column with tasks in status IN PROGRESS -->
+                    <div class="col-md-4">
+                        <div class="row">
+                            <div class="col">
+                                <h3>In progress</h3>
+                            </div>
+                        </div>
+
+                        <!-- row for inserting data -->
+                        <div class="row">
+                          <!-- col for inserting data -->
+                          <div class="col" id="inProgressDiv">
+
+                            
+                          </div>
+                          <!-- end col for inserting data -->
+                        </div>
+                        <!-- End row for inserting data -->
+
+                    </div>
+                    <!-- END Column with tasks in status IN PROGRESS -->
 
 
-                    <!-- Put your content inside this COL-DIV -->
+                    <!-- Column with tasks in status DONE-->
+                    <div class="col-md-4">
+                        <div class="row">
+                            <div class="col">
+                                <h3>Done</h3>
+                            </div>
+                        </div>
 
+                        <!-- row for inserting data -->
+                        <div class="row">
+                          <!-- col for inserting data -->
+                          <div class="col" id="doneDiv">
 
+                            
+                            
+                          </div>
+                          <!-- end col for inserting data -->
+                        </div>
+                        <!-- End row for inserting data -->
 
-                  </div>
+                    </div>
+                    <!-- END Column with tasks in status DONE -->
 
                 </div>
-
-
-
-
-
-
-
-
-            <!-- ------------------------------------------- -->
             </div>
             <!-- End right part of the screen -->
 
@@ -74,14 +115,13 @@
                   </a>
                   <hr>
                   <ul class="nav nav-pills flex-column mb-auto">
-                    <li class="nav-item">
-                      <a href="#" class="nav-link active" aria-current="page">
+                    <li>
+                      <a href="index.html" class="nav-link link-dark">
                         Main page
                       </a>
                     </li>
-                    <li>
                     <li class="nav-item">
-                      <a href="./taskcards.html" class="nav-link link-dark" aria-current="page">
+                      <a href="#" class="nav-link active" aria-current="page">
                         Task cards
                       </a>
                     </li>
