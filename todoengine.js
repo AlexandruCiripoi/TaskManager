@@ -9,7 +9,6 @@ taskListObject.readFromLocalStorage();
 taskListObject.putCardsToDivByState();
 
 
-/* ============ get the fields from ADD/EDIT task modal window ============ */
 const captionField = document.getElementById('caption');
 const descriptionField = document.getElementById('description');
 const dateStartField = document.getElementById('dateStart');

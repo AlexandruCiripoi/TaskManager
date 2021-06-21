@@ -171,7 +171,9 @@ export class TaskList{
             this.taskArray.push(newTask);
             console.log(`New task was added to array.`);
             this.saveToLocalStorage();
-            document.getElementById(stateDivIds[0]).appendChild(this.taskArray[this.taskArray.length-1].createCard());
+            if (window.location.pathname.includes('taskcards')){
+                document.getElementById(stateDivIds[0]).appendChild(this.taskArray[this.taskArray.length-1].createCard());
+            }
         }else{
             console.log(`Not a Task object!`);
         }
@@ -180,7 +182,9 @@ export class TaskList{
         console.log(`Removing task with id ${taskId} from array.`);
         this.taskArray=this.taskArray.filter(taskItem=>taskItem.id!=taskId);
         this.saveToLocalStorage();
-        document.getElementById(`card${taskId}`).remove();
+        if (window.location.pathname.includes('taskcards')){
+            document.getElementById(`card${taskId}`).remove();
+        }
     };
     saveToLocalStorage(){
         if (this.taskArray.length>0){
@@ -243,10 +247,12 @@ export class TaskList{
         this.saveToLocalStorage();
     };
     putCardsToDivByState(){
-        for (let state in stateDivIds){
-            const cardsWithState=this.taskArray.filter(taskItem=>taskItem.currentState==state);
-            const divToAppend = document.getElementById(stateDivIds[state]);
-            cardsWithState.forEach(card=>divToAppend.appendChild(card.createCard()))
+        if (window.location.pathname.includes('taskcards')){
+            for (let state in stateDivIds){
+                const cardsWithState=this.taskArray.filter(taskItem=>taskItem.currentState==state);
+                const divToAppend = document.getElementById(stateDivIds[state]);
+                cardsWithState.forEach(card=>divToAppend.appendChild(card.createCard()))
+            }
         }
     };
 }
