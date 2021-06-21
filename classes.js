@@ -1,11 +1,8 @@
 import { borderColor, categories, stateDivIds, stateIcons } from "./settings.js";
 
-
-
-//todo add a time-tracking function
+//TODO: add a time-tracking function
 let dateTimeNow = Date.now()
 console.log(dateTimeNow);
-
 
 
 export class Task{
@@ -20,12 +17,13 @@ export class Task{
         this.category = parseInt(category);
         this.currentState = parseInt(currentState);
         this.editBtnListener=editBtnListener;
+        
     };
     get getStartDate(){
-        return this.dateStart === "" ? "" : new Date(this.dateStart).toLocaleDateString()
+        return !this.dateStart ? "" : new Date(this.dateStart).toLocaleDateString()
     };
     get getEndDate(){
-        return this.dateEnd === "" ? "" : new Date(this.dateEnd).toLocaleDateString()
+        return !this.dateEnd ? "" : new Date(this.dateEnd).toLocaleDateString()
     }
     createButton(btnDataSetType,btnCaption,btnTaskID) {
         // const btnEditTask=['editTask','Edit'];
@@ -77,12 +75,12 @@ export class Task{
         const taskDescriptionRow = document.createElement('div');
         taskDescriptionRow.classList.add('row');
         const taskDescriptionCol = document.createElement('div');
-        taskDescriptionCol.classList.add('col-8');
+        taskDescriptionCol.classList.add('col-lg-8');
         const taskDescriptionText = document.createElement('p');
         taskDescriptionText.innerText = this.description;
         taskDescriptionCol.appendChild(taskDescriptionText);
         const dateTimeCol = document.createElement('div');
-        dateTimeCol.classList.add('col-4');
+        dateTimeCol.classList.add('col-lg-4');
         const dateTimeText1 = document.createElement('h5');
         const dateTimeText2 = document.createElement('h5');
         const dateTimeText3 = document.createElement('h5');
@@ -153,6 +151,8 @@ export class Task{
 
             document.getElementById(`card${this.id}`).remove();
             document.getElementById(stateDivIds[this.currentState]).appendChild(this.createCard());
+
+            //need to save array at this point!
         }
     };
 };
@@ -164,6 +164,7 @@ export class TaskList{
         this.taskArray = Array.isArray(taskArray) ? taskArray : [];
         this.localStorage = window.localStorage;
         this.editBtnListener=editBtnListener;
+        this.referenceToArray=this;
     };
     addNewTask(newTask){
         if (newTask instanceof Task){
@@ -221,7 +222,7 @@ export class TaskList{
         // this.taskArray[editID].category=newData.category;
         // this.taskArray[editID].setState=newData.currentState;
         // this.taskArray[editID].editBtnListener=this.editBtnListener;
-        
+
         // document.getElementById(`card${taskId}`).remove();
         // document.getElementById(stateDivIds[newData.currentState]).appendChild(this.taskArray[editID].createCard());
 

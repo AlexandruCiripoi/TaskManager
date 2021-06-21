@@ -4,15 +4,15 @@ import { TaskList } from "./classes.js";
 
 let taskListObject=new TaskList(); //Create a new Tasklist object
 taskListObject.readFromLocalStorage(); //read data from local storage into it
-let tableData = taskListObject.taskArray; //just use it's own array for our table data
-console.log(taskListObject);
-console.log(tableData);
+
+let tableData = taskListObject.taskArray; //just use the array inside TaskList for our table data
+
 
 /* make categoties, state and dates corrections text */
 tableData=tableData.map(v=>{
     v.category=categories[v.category];
-    v.dateStart = v.dateStart === "" ? "" : new Date(v.dateStart).toLocaleDateString();
-    v.dateEnd = v.dateEnd === "" ? "" : new Date(v.dateEnd).toLocaleDateString();
+    v.dateStart = !v.dateStart ? "" : new Date(v.dateStart).toLocaleDateString();
+    v.dateEnd = !v.dateEnd  ? "" : new Date(v.dateEnd).toLocaleDateString();
     v.currentState = stateText[v.currentState];
     return v});
 /* ------------------------------------------ */
