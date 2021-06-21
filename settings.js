@@ -29,7 +29,7 @@ export const borderColor = {
   }
 
   export const stateIcons = {
-    0: "\u274F",
-    1: "\u27BA",
-    2: "\u2714",
+    0: "\u274F", //square
+    1: "\u27BA", //arrow
+    2: "\u2714", //checked
 }
