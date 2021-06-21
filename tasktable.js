@@ -1,32 +1,19 @@
 /* ============ from engine ============ */
-import { categories } from "./settings.js";
-function readFromLocalStorage() {
-    console.log('Reading list from local storage.');
-    const savedData = theStorage.getItem('TaskList'); 
-    if (!savedData){
-        console.log('No data in storage.');
-        return {}
-    }
-    console.log('Data found.');
-    return JSON.parse(savedData);
-};
-let taskList={};
-let theStorage = window.localStorage;
-taskList=readFromLocalStorage(); //try to load data from local storage
+import { categories, stateText } from "./settings.js";
+import { TaskList } from "./classes.js";
 
-
-let tableData = []
-for (const property in taskList) {
-    // console.log('loop',taskList[property]);
-    tableData.push(taskList[property]);
-  }
+let taskListObject=new TaskList(); //Create a new Tasklist object
+taskListObject.readFromLocalStorage(); //read data from local storage into it
+let tableData = taskListObject.taskArray; //just use it's own array for our table data
+console.log(taskListObject);
+console.log(tableData);
 
 /* make categoties, state and dates corrections text */
 tableData=tableData.map(v=>{
     v.category=categories[v.category];
     v.dateStart = v.dateStart === "" ? "" : new Date(v.dateStart).toLocaleDateString();
     v.dateEnd = v.dateEnd === "" ? "" : new Date(v.dateEnd).toLocaleDateString();
-    v.currentState = v.currentState === 0 ? "ToDo" : v.currentState === 1 ? "In progress" : "Done!";
+    v.currentState = stateText[v.currentState];
     return v});
 /* ------------------------------------------ */
 

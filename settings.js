@@ -21,3 +21,9 @@ export const borderColor = {
       1: "inProgressDiv",
       2: "doneDiv",
   }
+
+  export const stateText = {
+        0: "ToDo",
+        1: "In progress",
+        2: "Done!",
+  }

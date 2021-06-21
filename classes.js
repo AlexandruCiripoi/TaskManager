@@ -1,7 +1,15 @@
 import { borderColor, categories, stateDivIds } from "./settings.js";
 
+
+
+//todo add a time-tracking function
+let dateTimeNow = Date.now()
+console.log(dateTimeNow);
+
+
+
 export class Task{
-    constructor(caption='',description='',dateStart='',timeStart='',dateEnd='',timeEnd='',category=0,currentState=0,id){
+    constructor(caption='',description='',dateStart='',timeStart='',dateEnd='',timeEnd='',category=0,currentState=0,editBtnListener,id){
         this.id=id || `ID${Date.now().toString()}`; //generating ID on task creation
         this.caption = caption;
         this.description = description;
@@ -11,6 +19,7 @@ export class Task{
         this.timeEnd = dateEnd == dateStart && timeStart == timeEnd ? '' : timeEnd;
         this.category = parseInt(category);
         this.currentState = parseInt(currentState);
+        this.editBtnListener=editBtnListener;
     };
     get getStartDate(){
         return this.dateStart === "" ? "" : new Date(this.dateStart).toLocaleDateString()
@@ -45,6 +54,8 @@ export class Task{
         const categoryDivCol=document.createElement('div');
         categoryDivCol.classList.add('col', 'bg-light', 'text-dark', 'rounded-3', 'p-2');
         categoryDivCol.innerText=categories[this.category];
+
+
         categoryDivRow.appendChild(categoryDivCol);
 
         const taskHeaderRow = document.createElement('div');
@@ -52,8 +63,18 @@ export class Task{
 
         const taskHeaderCol = document.createElement('div');
         taskHeaderCol.classList.add('col');
-        const taskHeaderText =  document.createElement('h4');
-        taskHeaderText.innerText=this.caption;
+
+        const taskHeaderText = document.createElement('h4'); //innerText is clean on new created element
+        if (this.currentState===2){ //when state is Done (2) - add an Icon
+            const checkedP=document.createTextNode("\u2714 ");
+            taskHeaderText.appendChild(checkedP);
+        }else if(this.currentState===1){
+            const checkedP=document.createTextNode("\u27BA ");
+            taskHeaderText.appendChild(checkedP);
+        }
+        taskHeaderText.innerText+=this.caption;
+
+
         taskHeaderCol.appendChild(taskHeaderText);
         taskHeaderRow.appendChild(taskHeaderCol);
 
@@ -103,13 +124,14 @@ export class Task{
         btnGroup.setAttribute('role','group');
         btnGroup.setAttribute('id',`btnGrp${this.id}`);
         // add buttons inside btnGroup
-        const btnToTODO = this.createButton('taskBackToDo1','< ToDo',this.id);
-        const btnEdit = this.createButton('editTask1','Edit',this.id);
-        const btnToProgress = this.createButton('taskToProgress1','In progress',this.id);
-        const btnToDone = this.createButton('taskToDone1','Done >',this.id);
+        const btnToTODO = this.createButton('taskBackToDo','< ToDo',this.id);
+        const btnEdit = this.createButton('editTask','Edit',this.id);
+        const btnToProgress = this.createButton('taskToProgress','In progress',this.id);
+        const btnToDone = this.createButton('taskToDone','Done >',this.id);
         btnToDone.addEventListener('click',()=>this.setState=2);
         btnToProgress.addEventListener('click',()=>this.setState=1);
         btnToTODO.addEventListener('click',()=>this.setState=0);
+        btnEdit.addEventListener('click',this.editBtnListener);
 
         if (this.currentState === 0){
             btnGroup.appendChild(btnEdit);
@@ -142,9 +164,10 @@ export class Task{
 
 
 export class TaskList{
-    constructor(taskArray){
+    constructor(taskArray,editBtnListener){
         this.taskArray = Array.isArray(taskArray) ? taskArray : [];
         this.localStorage = window.localStorage;
+        this.editBtnListener=editBtnListener;
     };
     addNewTask(newTask){
         if (newTask instanceof Task){
@@ -166,8 +189,7 @@ export class TaskList{
         if (this.taskArray.length>0){
             this.localStorage.setItem('TaskListObject',JSON.stringify(this.taskArray));
             console.log('List was saved to local storage.')
-        }
-        console.log('Array is empty, nothing to save.')
+        }else console.log('Array is empty, nothing to save.')
     };
     readFromLocalStorage(){
         console.log('Reading list from local storage.');
@@ -175,23 +197,52 @@ export class TaskList{
         if (!savedData){
             console.log('No data in storage.');
             this.taskArray = [];
+        }else{
+            console.log('Data found.');
+            savedData=JSON.parse(savedData);
+            // savedData=savedData.map(taskItem=>{
+            //     if (Number.isInteger(taskItem.currentState)){
+            //         return taskItem
+            //     }
+            //     console.log(taskItem.currentState);
+            //     taskItem.currentState=0;
+            //     return taskItem
+            // });
+            this.taskArray = savedData.map(taskItem=>new Task(taskItem.caption,taskItem.description,taskItem.dateStart,taskItem.timeStart,taskItem.dateEnd,taskItem.timeEnd,taskItem.category,taskItem.currentState,this.editBtnListener,taskItem.id));
         }
-        console.log('Data found.');
-        savedData=JSON.parse(savedData);
-        this.taskArray = savedData.map(taskItem=>new Task(taskItem.caption,taskItem.description,taskItem.dateStart,taskItem.timeStart,taskItem.dateEnd,taskItem.timeEnd,taskItem.category,taskItem.currentState,taskItem.id));
+    };
+    getTaskData(taskId){
+        return this.taskArray.find(task=>task.id===taskId)
     };
     editTask(taskId,newData){
-        const editID = this.taskArray.findIndex(task=>{task.id===taskId});
-        this.taskArray[editID].caption=newData.caption;
-        this.taskArray[editID].description=newData.description;
-        this.taskArray[editID].dateStart=newData.dateStart;
-        this.taskArray[editID].timeStart=newData.timeStart;
-        this.taskArray[editID].dateEnd=newData.dateEnd;
-        this.taskArray[editID].timeEnd=newData.timeEnd;
-        this.taskArray[editID].category=newData.category;
-        this.taskArray[editID].setState=newData.currentState;
+        // const editID = this.taskArray.findIndex(task=>task.id===taskId);
+        // this.taskArray[editID].caption=newData.caption;
+        // this.taskArray[editID].description=newData.description;
+        // this.taskArray[editID].dateStart=newData.dateStart;
+        // this.taskArray[editID].timeStart=newData.timeStart;
+        // this.taskArray[editID].dateEnd=newData.dateEnd;
+        // this.taskArray[editID].timeEnd=newData.timeEnd;
+        // this.taskArray[editID].category=newData.category;
+        // this.taskArray[editID].setState=newData.currentState;
+        // this.taskArray[editID].editBtnListener=this.editBtnListener;
+        
+        // document.getElementById(`card${taskId}`).remove();
+        // document.getElementById(stateDivIds[newData.currentState]).appendChild(this.taskArray[editID].createCard());
+
+        const editingTask = this.taskArray.find(task=>task.id===taskId);
+        editingTask.caption=newData.caption;
+        editingTask.description=newData.description;
+        editingTask.dateStart=newData.dateStart;
+        editingTask.timeStart=newData.timeStart;
+        editingTask.dateEnd=newData.dateEnd;
+        editingTask.timeEnd=newData.timeEnd;
+        editingTask.category=newData.category;
+        editingTask.setState=newData.currentState;
+        editingTask.editBtnListener=this.editBtnListener;
+        
         document.getElementById(`card${taskId}`).remove();
-        document.getElementById(stateDivIds[newData.currentState]).appendChild(this.taskArray[editID].createCard());
+        document.getElementById(stateDivIds[newData.currentState]).appendChild(editingTask.createCard());
+
         this.saveToLocalStorage();
     };
     putCardsToDivByState(){

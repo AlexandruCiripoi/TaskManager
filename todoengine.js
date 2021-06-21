@@ -1,7 +1,10 @@
 import { Task, TaskList } from "./classes.js";
 import { categories } from "./settings.js";
 
-let taskListObject=new TaskList();
+
+
+
+let taskListObject=new TaskList([],editBtnListener);
 taskListObject.readFromLocalStorage();
 taskListObject.putCardsToDivByState();
 
@@ -57,6 +60,7 @@ function btnAccordionClick() {
 function showModalAddNewTask() {
     toggleAddModal('add');
     timeAccordion.classList.remove('show'); //close accordion
+    if (!btnAccordion.classList.contains('collapsed'))btnAccordion.classList.add('collapsed');
     captionField.value = "";
     descriptionField.value = "";
     dateStartField.value = "";
@@ -70,38 +74,28 @@ function showModalAddNewTask() {
 /* ========================================================== */
 /* ========================================================== */
 /* If we click on Edit button this function will run */
-function btnClickEditTask(taskID) {
-    // console.log('editTask',taskID);
-    /* you can edit task list by 
-    taskList[taskID].caption = "new caption";
-    taskList[taskID].description = "new description";
-    and so on...!
-    or fill up elements on the page by
-    captionField.value = 'some caption';
-
-    modalWindowAddNewTask.toggle() - call it to toggle modal
-    */
+function openModalEditWin(taskToEdit) {
     toggleAddModal('edit');
-    if (taskList[taskID].dateStart != "" || taskList[taskID].timeStart != "" ||taskList[taskID].timeEnd != "" ||taskList[taskID].dateEnd != ""){
+    if (taskToEdit.dateStart || taskToEdit.timeStart || taskToEdit.timeEnd || taskToEdit.dateEnd){
+        console.log('datetime exist');
         timeAccordion.classList.add('show');
         if (btnAccordion.classList.contains('collapsed'))btnAccordion.classList.remove('collapsed');
     }else{
         timeAccordion.classList.remove('show')
         if (!btnAccordion.classList.contains('collapsed'))btnAccordion.classList.add('collapsed');
     }
-    captionField.value = taskList[taskID].caption;
-    descriptionField.value = taskList[taskID].description;
-    dateStartField.value = taskList[taskID].dateStart;
-    timeStartField.value = taskList[taskID].timeStart;
-    timeEndField.value = taskList[taskID].timeEnd;
-    dateEndField.value = taskList[taskID].dateEnd;
-    categoriesDropDown.value = taskList[taskID].category;
-    currentStateHidden.value = taskList[taskID].currentState;
-    taskIDHidden.value = taskID;
+    captionField.value = taskToEdit.caption;
+    descriptionField.value = taskToEdit.description;
+    dateStartField.value = taskToEdit.dateStart;
+    timeStartField.value = taskToEdit.timeStart;
+    timeEndField.value = taskToEdit.timeEnd;
+    dateEndField.value = taskToEdit.dateEnd;
+    categoriesDropDown.value = taskToEdit.category;
+    currentStateHidden.value = taskToEdit.currentState;
+    taskIDHidden.value = taskToEdit.id;
     modalWindowAddNewTask.toggle(); //open modal window
 }
 // toggleAddModal();
-
 function toggleAddModal(action) {
     if (action==='edit'){
         // console.log('you pressed Edit');
@@ -118,9 +112,13 @@ function toggleAddModal(action) {
 }
 
 //OBJ rewritten functions
+function editBtnListener(e) {
+    openModalEditWin(taskListObject.getTaskData(e.target.dataset.taskId));
+}
+
 /* function called when a ADD button pressed */
 function btnClickAddNewTask() {
-  const taskToAdd = new Task(captionField.value,captionField.value,dateStartField.value,timeStartField.value,dateEndField.value,timeEndField.value,categoriesDropDown.value)
+  const taskToAdd = new Task(captionField.value,captionField.value,dateStartField.value,timeStartField.value,dateEndField.value,timeEndField.value,categoriesDropDown.value,0,editBtnListener);
   taskListObject.addNewTask(taskToAdd);
   modalWindowAddNewTask.toggle() //close modal window
 };
