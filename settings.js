@@ -27,3 +27,9 @@ export const borderColor = {
         1: "In progress",
         2: "Done!",
   }
+
+  export const stateIcons = {
+    0: "\u274F",
+    1: "\u27BA",
+    2: "\u2714",
+}

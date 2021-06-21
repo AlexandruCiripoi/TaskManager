@@ -1,4 +1,4 @@
-import { borderColor, categories, stateDivIds } from "./settings.js";
+import { borderColor, categories, stateDivIds, stateIcons } from "./settings.js";
 
 
 
@@ -65,14 +65,10 @@ export class Task{
         taskHeaderCol.classList.add('col');
 
         const taskHeaderText = document.createElement('h4'); //innerText is clean on new created element
-        if (this.currentState===2){ //when state is Done (2) - add an Icon
-            const checkedP=document.createTextNode("\u2714 ");
-            taskHeaderText.appendChild(checkedP);
-        }else if(this.currentState===1){
-            const checkedP=document.createTextNode("\u27BA ");
-            taskHeaderText.appendChild(checkedP);
-        }
-        taskHeaderText.innerText+=this.caption;
+        
+        const checkedP=document.createTextNode(stateIcons[this.currentState]);
+        taskHeaderText.appendChild(checkedP);
+        taskHeaderText.innerText+=' ' + this.caption;
 
 
         taskHeaderCol.appendChild(taskHeaderText);
