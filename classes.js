@@ -6,7 +6,7 @@ console.log(dateTimeNow);
 
 
 export class Task{ // the Task 
-    constructor(caption='',description='',dateStart='',timeStart='',dateEnd='',timeEnd='',category=0,currentState=0,editBtnListener,changeTaskStatusBtnListener,id){
+    constructor(caption='',description='',dateStart='',timeStart='',dateEnd='',timeEnd='',category=0,currentState=0,editBtnListener,changeTaskState,id){
         this.id=id || `ID${Date.now().toString()}`; //generating ID on task creation
         this.caption = caption;
         this.description = description;
@@ -17,7 +17,7 @@ export class Task{ // the Task
         this.category = parseInt(category);
         this.currentState = parseInt(currentState);
         this.editBtnListener=editBtnListener;
-        this.changeTaskStatusBtnListener=changeTaskStatusBtnListener;
+        this.changeTaskState=changeTaskState;
     };
     get getStartDate(){
         return !this.dateStart ? "" : new Date(this.dateStart).toLocaleDateString()
@@ -199,7 +199,7 @@ export class TaskList{ //the TaskList
         }else{
             console.log('Data found.');
             savedData=JSON.parse(savedData);
-            this.taskArray = savedData.map(taskItem=>new Task(taskItem.caption,taskItem.description,taskItem.dateStart,taskItem.timeStart,taskItem.dateEnd,taskItem.timeEnd,taskItem.category,taskItem.currentState,this.editBtnListener,this.changeTaskStatusBtnListener,taskItem.id));
+            this.taskArray = savedData.map(taskItem=>new Task(taskItem.caption,taskItem.description,taskItem.dateStart,taskItem.timeStart,taskItem.dateEnd,taskItem.timeEnd,taskItem.category,taskItem.currentState,this.editBtnListener,this.changeTaskState,taskItem.id));
         }
     };
     getTaskData(taskId){
