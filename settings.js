@@ -16,19 +16,19 @@ export const borderColor = {
     5: "light",
   };
 
-  export const stateDivIds = {
+export const stateDivIds = {
       0: "toDoDiv",
       1: "inProgressDiv",
       2: "doneDiv",
   }
 
-  export const stateText = {
+export const stateText = {
         0: "ToDo",
         1: "In progress",
         2: "Done!",
   }
 
-  export const stateIcons = {
+export const stateIcons = {
     0: "\u274F", //square
     1: "\u27BA", //arrow
     2: "\u2714", //checked
