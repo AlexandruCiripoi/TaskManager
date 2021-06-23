@@ -1,18 +1,32 @@
-let taskList={
-    ID1623744856709:{ /* ID can be generated using  generateId() */
-        caption:'some caption', /* text from text field */
-        description:'some description', /* text from text field *
-        category:1,/* a number that represents category (we can use an external obj for this list)
-        a category can be used for highlighting or to split tasks into groups */
-        category:0,/* a number that represents category (we can use an external obj for this list)
-        a category can be used for highlighting or to split tasks into groups */
-
+let templateList={
+    0:{ 
+        caption:'some caption', 
+        description:'some description',
+        category:0,
     },
-    ID1623744856218:{ /* ID can be generated using  generateId() */
-        caption:'Create a GitHub repository', /* text from text field */
-        description:'And decide who does which part', /* text from text field */
-        category:1,/* a number that represents category (we can use an external obj for this list)
-        a category can be used for highlighting or to split tasks into groups */
-
+    1:{ 
+        caption:'some caption', 
+        description:'some description',
+        category:1,
+    },
+    2:{ 
+        caption:'some caption', 
+        description:'some description',
+        category:2,
+    },
+    3:{ 
+        caption:'some caption', 
+        description:'some description',
+        category:3,
+    },
+    4:{ 
+        caption:'some caption', 
+        description:'some description',
+        category:4,
+    },
+    5:{ 
+        caption:'some caption', 
+        description:'some description',
+        category:5,
     },
 };
