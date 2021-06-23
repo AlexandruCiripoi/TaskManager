@@ -74,7 +74,7 @@ function btnAccordionClick() { //if accordion was not open and there were no dat
 function showModalAddNewTask() { //Show modal window for adding a new task
     toggleAddModal('add');//There are 2 states of modal window. Now we need ADD
     timeAccordion.classList.remove('show'); //close accordion
-<<<<<<< HEAD
+
     if (!btnAccordion.classList.contains('collapsed'))btnAccordion.classList.add('collapsed');//close accordion 2
     captionField.value = ""; //clear all values inside input elements
     descriptionField.value = "";
@@ -84,16 +84,7 @@ function showModalAddNewTask() { //Show modal window for adding a new task
     timeEndField.value = "";
     categoriesDropDown.value = 0;
     currentStateHidden.value = 0;
-=======
-    // captionField.value = "";
-    // descriptionField.value = "";
-    // dateStartField.value = "";
-    // timeStartField.value = "";
-    // dateEndField.value = "";
-    // timeEndField.value = "";
-    // categoriesDropDown.value = 0;
-    // currentStateHidden.value = 0;
->>>>>>> alex-branch5
+
     modalWindowAddNewTask.toggle(); //open modal window
 }
 /* ========================================================== */
