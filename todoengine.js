@@ -1,14 +1,23 @@
 import { Task, TaskList } from "./classes.js"; //importing classes from another file - to keep everything clean
 import { categories } from "./settings.js"; //importing settings from another file - to keep everything clean
 
-let taskListObject=new TaskList([],editBtnListener,changeTaskStatusBtnListener);
+let taskListObject=new TaskList([],editBtnListener);
 //creating an instance of TaskList.
 //1st parameter is an array of tasks (empty array at the moment)
 //2nd parameter is a reference to a function that will be added as an EventListener for EDIT buttons on every task card
-//3rd parameter is a reference to a function that will be added as an EventListener for buttons that change state of task
 taskListObject.readFromLocalStorage(); //taskListObject has its own local storage
 taskListObject.putCardsToDivByState(); //can create and put task-card-elements into DIVs that are specified in settings.
+// console.log(taskListObject.taskArray);
 
+try {
+    const clockDiv = document.getElementById('clock');
+    if (clockDiv)setInterval(() => {
+        clockDiv.innerHTML=`<h5>${new Date(Date.now()).toLocaleString()}</h5>`
+    }, 1000);
+
+} catch (e) {
+    console.log(e);
+}
 
 const captionField = document.getElementById('caption');
 const descriptionField = document.getElementById('description');
@@ -135,17 +144,13 @@ function toggleAddModal(action) {
 function editBtnListener(taskId) {
     openModalEditWin(taskListObject.getTaskData(taskId));
 }
-//A reference to this function is added to every button that changes state of the task (onClick)
-function changeTaskStatusBtnListener(taskId,newState) {
-    taskListObject.changeTaskState(taskId,newState) //I would call this directly, but I didn't manage to make a direct reference to THIS of current taskListObject
-}
 
 /* function called when a ADD button pressed */
 function btnClickAddNewTask() {
-  const taskToAdd = new Task(captionField.value,descriptionField.value,dateStartField.value,timeStartField.value,dateEndField.value,timeEndField.value,categoriesDropDown.value,0,editBtnListener,changeTaskStatusBtnListener);
+  const taskToAdd = new Task(captionField.value,descriptionField.value,dateStartField.value,timeStartField.value,dateEndField.value,timeEndField.value,categoriesDropDown.value,0);
   taskListObject.addNewTask(taskToAdd);
   modalWindowAddNewTask.toggle() //close modal window
-  if (window.location.pathname.includes('index.html')){
+  if (window.location.pathname.includes('index.html')){ //if we're adding a new task from index page - goto cards page.
     window.location.assign('./taskcards.html')
   }
 };
