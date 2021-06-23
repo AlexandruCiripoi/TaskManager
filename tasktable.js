@@ -5,7 +5,7 @@ import { TaskList } from "./classes.js";
 let taskListObject=new TaskList(); //Create a new Tasklist object
 taskListObject.readFromLocalStorage(); //read data from local storage into it
 
-let tableData = taskListObject.taskArray; //just use the array inside TaskList for our table data
+let tableData = taskListObject.getTaskArray(); //just use the array inside TaskList for our table data
 
 
 /* make categoties, state and dates corrections text */

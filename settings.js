@@ -32,4 +32,5 @@ export const borderColor = {
     0: "\u274F", //square
     1: "\u27BA", //arrow
     2: "\u2714", //checked
+    99:"\u231B", //clock
 }

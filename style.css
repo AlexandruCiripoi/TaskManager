@@ -1,7 +1,33 @@
+/* Landing page*/
+.bg-image {
+    background-image: linear-gradient(rgba(255, 0, 0, 0.45), #0044ff73),
+        url("./team-task-management.jpeg");
+    height: 550px;
+    object-fit: cover;
+    opacity: 0.5;
+    padding-top: 20px;
+}
+
+#header {
+    border: white solid 3px;
+    border-radius: 10px;
+}
+
+h1 {
+    color: white;
+    text-align: center;
+}
+
+
+
+
+/*pages with sidebar*/
 .sidebar{
     min-height: 100vh;
 }
 
+
+/*page with table*/
 td.details-control {
     background: url('../resources/details_open.png') no-repeat center center;
     cursor: pointer;
