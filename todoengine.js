@@ -19,6 +19,10 @@ try {
     console.log(e);
 }
 
+
+
+
+
 const captionField = document.getElementById('caption');
 const descriptionField = document.getElementById('description');
 const dateStartField = document.getElementById('dateStart');
@@ -175,4 +179,33 @@ function btnClickSaveEditedTask() {
   };
   taskListObject.editTask(taskIDHidden.value,newData); //passing to taskListObject
   modalWindowAddNewTask.toggle();
+}
+
+
+
+
+
+//If there is some data from library inside local storage
+const localStorage = window.localStorage;
+let dataFromLibrary = localStorage.getItem('addNewFromTemplate');
+if (dataFromLibrary){
+    console.log("Found data from library inside localStorage.");
+    openModalNewTaskFromTemplate(dataFromLibrary);
+    localStorage.removeItem('addNewFromTemplate');
+};
+
+function openModalNewTaskFromTemplate(dataFromLibrary) {
+    toggleAddModal('add');//There are 2 states of modal window. Now we need ADD
+    timeAccordion.classList.remove('show'); //close accordion
+    if (!btnAccordion.classList.contains('collapsed'))btnAccordion.classList.add('collapsed');//close accordion 2
+    captionField.value = dataFromLibrary.caption;
+    descriptionField.value = dataFromLibrary.description;
+    categoriesDropDown.value = dataFromLibrary.category;
+    dateStartField.value = "";
+    timeStartField.value = "";
+    dateEndField.value = "";
+    timeEndField.value = "";
+    currentStateHidden.value = 0;
+
+    modalWindowAddNewTask.toggle(); //open modal window
 }
