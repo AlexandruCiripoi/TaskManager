@@ -333,14 +333,14 @@ function splitByState(taskList) {
 function showModalAddNewTask() {
     toggleAddModal('add');
     timeAccordion.classList.remove('show'); //close accordion
-    captionField.value = "";
-    descriptionField.value = "";
-    dateStartField.value = "";
-    timeStartField.value = "";
-    dateEndField.value = "";
-    timeEndField.value = "";
-    categoriesDropDown.value = 0;
-    currentStateHidden.value = 0;
+    // captionField.value = "";
+    // descriptionField.value = "";
+    // dateStartField.value = "";
+    // timeStartField.value = "";
+    // dateEndField.value = "";
+    // timeEndField.value = "";
+    // categoriesDropDown.value = 0;
+    // currentStateHidden.value = 0;
     modalWindowAddNewTask.toggle(); //open modal window
 }
 /* ========================================================== */
