@@ -130,7 +130,7 @@ export class TaskList{ //the TaskList
         const categoryDivRow=document.createElement('div');
         categoryDivRow.classList.add('row');
         const categoryDivCol=document.createElement('div');
-        categoryDivCol.classList.add('col', 'bg-light', 'text-dark', 'rounded-3', 'p-2');
+        categoryDivCol.classList.add('col', `bg-${borderColor[referenceToTask.category]}`, `text-${referenceToTask.category==4 ? 'light': 'dark'}`, 'rounded-3', 'p-2');
         categoryDivCol.innerText=categories[referenceToTask.category];
 
 
@@ -179,26 +179,34 @@ export class TaskList{ //the TaskList
         const taskDescriptionRow = document.createElement('div');
         taskDescriptionRow.classList.add('row');
         const taskDescriptionCol = document.createElement('div');
-        taskDescriptionCol.classList.add('col-lg-8');
+        taskDescriptionCol.classList.add('col');
         const taskDescriptionText = document.createElement('p');
         taskDescriptionText.innerText = referenceToTask.description;
         taskDescriptionCol.appendChild(taskDescriptionText);
-        const dateTimeCol = document.createElement('div');
-        dateTimeCol.classList.add('col-lg-4');
-        const dateTimeText1 = document.createElement('h5');
-        const dateTimeText2 = document.createElement('h5');
-        const dateTimeText3 = document.createElement('h5');
-        const dateTimeText4 = document.createElement('h5');
+        taskDescriptionRow.appendChild(taskDescriptionCol);
+
+        const dateTimeRow = document.createElement('div');
+        dateTimeRow.classList.add('row','mb-3');
+        // const dateTimeCol = document.createElement('div');
+        // dateTimeCol.classList.add('col');
+        const dateTimeText1 = document.createElement('div');
+        const dateTimeText2 = document.createElement('div');
+        const dateTimeText3 = document.createElement('div');
+        const dateTimeText4 = document.createElement('div');
+        dateTimeText1.classList.add('col');
+        dateTimeText2.classList.add('col');
+        dateTimeText3.classList.add('col');
+        dateTimeText4.classList.add('col');
         dateTimeText1.innerText = referenceToTask.getStartDate;
         dateTimeText2.innerText = referenceToTask.timeStart;
         dateTimeText3.innerText = referenceToTask.getEndDate;
         dateTimeText4.innerText = referenceToTask.timeEnd;
-        dateTimeCol.appendChild(dateTimeText1);
-        dateTimeCol.appendChild(dateTimeText2);
-        dateTimeCol.appendChild(dateTimeText3);
-        dateTimeCol.appendChild(dateTimeText4);
-        taskDescriptionRow.appendChild(taskDescriptionCol);
-        taskDescriptionRow.appendChild(dateTimeCol);
+        if (referenceToTask.dateStart)dateTimeRow.appendChild(dateTimeText1);
+        if (referenceToTask.timeStart)dateTimeRow.appendChild(dateTimeText2);
+        if (referenceToTask.dateEnd)dateTimeRow.appendChild(dateTimeText3);
+        if (referenceToTask.dateEnd)dateTimeRow.appendChild(dateTimeText4);
+        // dateTimeRow.appendChild(dateTimeCol);
+        
 
         const taskFooterRow = document.createElement('div');
         taskFooterRow.classList.add('row','mb-3');
@@ -211,6 +219,9 @@ export class TaskList{ //the TaskList
         cardMainDivCol.appendChild(categoryDivRow);
         cardMainDivCol.appendChild(taskHeaderRow);
         cardMainDivCol.appendChild(taskDescriptionRow);
+
+        cardMainDivCol.appendChild(dateTimeRow);
+
         cardMainDivCol.appendChild(taskFooterRow);
         cardMainDivRow.appendChild(cardMainDivCol);
 
