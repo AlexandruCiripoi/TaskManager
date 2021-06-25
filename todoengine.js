@@ -189,9 +189,11 @@ function btnClickSaveEditedTask() {
 const localStorage = window.localStorage;
 let dataFromLibrary = localStorage.getItem('addNewFromTemplate');
 if (dataFromLibrary){
+    dataFromLibrary=JSON.parse(dataFromLibrary);
     console.log("Found data from library inside localStorage.");
     openModalNewTaskFromTemplate(dataFromLibrary);
     localStorage.removeItem('addNewFromTemplate');
+    
 };
 
 function openModalNewTaskFromTemplate(dataFromLibrary) {
