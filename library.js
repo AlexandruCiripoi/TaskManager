@@ -22,6 +22,12 @@ let important = document.getElementById("important");
 let notImportant = document.getElementById("notimportant");
 
 function populateLibrary() {
+    noCategory.innerHTML = ""
+    learning.innerHTML = ""
+    eating.innerHTML = ""
+    excercise.innerHTML = ""
+    important.innerHTML = ""
+    notImportant.innerHTML = ""
     for (const property in templateList) {
         let templateDOM = `<div class="col-4 border ">
 <!-- Card begin (col) -->
@@ -51,9 +57,9 @@ function populateLibrary() {
     <!-- we can add <hr> here -->
         <div class="col">
             <div class="btn-group" role="group" aria-label="Basic example">
-                <a href="#" class="btn btn-info border border-light">Edit </a>
-                <a href="#" class="btn btn-info border border-light"> Schadule </a>
-                <a href="#" class="btn btn-info border border-light"> Delete </a>
+                <a href="#" class="btn btn-info border border-light" id="editBTNid${property}">Edit </a>
+                <a href="#" class="btn btn-info border border-light" id="scheduleBTNid${property}"> Schedule </a>
+                <a href="#" class="btn btn-info border border-light" id="deleteBTNid${property}"> Delete </a>
             </div>
         </div>
                 </div>
@@ -62,32 +68,91 @@ function populateLibrary() {
 
 </div>`
 
-        // console.log(`${property}: ${templateList[property].description}`);
-        console.log(property, templateList[property])
+
         switch (parseInt(property)) {
             case 0:
                 noCategory.innerHTML += templateDOM
-                
+                addListinerToBTN(`editBTNid${property}`)
+                addListinerToSchedule(`scheduleBTNid${property}`)
+                addListinerToDelete(`deleteBTNid${property}`)
                 break;
             case 1:
                 learning.innerHTML += templateDOM
+                addListinerToBTN(`editBTNid${property}`)
+                addListinerToSchedule(`scheduleBTNid${property}`)
+                addListinerToDelete(`deleteBTNid${property}`)
                 break;
             case 2:
                 eating.innerHTML += templateDOM
+                addListinerToBTN(`editBTNid${property}`)
+                addListinerToSchedule(`scheduleBTNid${property}`)
+                addListinerToDelete(`deleteBTNid${property}`)
                 break;
             case 3:
                 excercise.innerHTML += templateDOM
+                addListinerToBTN(`editBTNid${property}`)
+                addListinerToSchedule(`scheduleBTNid${property}`)
+                addListinerToDelete(`deleteBTNid${property}`)
                 break;
             case 4:
                 important.innerHTML += templateDOM
+                addListinerToBTN(`editBTNid${property}`)
+                addListinerToSchedule(`scheduleBTNid${property}`)
+                addListinerToDelete(`deleteBTNid${property}`)
                 break;
             case 5:
                 notImportant.innerHTML += templateDOM
+                addListinerToBTN(`editBTNid${property}`)
+                addListinerToSchedule(`scheduleBTNid${property}`)
+                addListinerToDelete(`deleteBTNid${property}`)
                 break;
             default:
             // code block
+        
         }
+    
     }
+    
+        
 }
 
 populateLibrary()
+
+
+function addListinerToBTN(id) {
+    document.getElementById(id).addEventListener("click", function() {
+        console.log("works")
+        });
+}
+
+function addListinerToDelete(id) {
+    document.getElementById(id).addEventListener("click", function() {
+        let identification = parseInt(id.substring(11))
+        
+        delete templateList[identification]
+        console.log(templateList)
+        populateLibrary()
+        });
+}
+
+function addListinerToSchedule(id) {
+    document.getElementById(id).addEventListener("click", function() {
+        let identification = parseInt(id.substring(13))
+        console.log(templateList[identification])
+        const localStorage = window.localStorage;
+        localStorage.setItem('addNewFromTemplate',JSON.stringify(templateList[identification]));
+        window.location.assign('./taskcards.html')
+        });
+}
+
+
+
+// $('#exampleModal').on('show.bs.modal', function (event) {
+//     var button = $(event.relatedTarget) // Button that triggered the modal
+//     var recipient = button.data('whatever') // Extract info from data-* attributes
+//     // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+//     // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+//     var modal = $(this)
+//     modal.find('.modal-title').text('New message to ' + recipient)
+//     modal.find('.modal-body input').val(recipient)
+//   })
