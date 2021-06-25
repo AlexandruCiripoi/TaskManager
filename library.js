@@ -1,25 +1,33 @@
-// function toggleAddModal(action) {
-//     if (action==='edit'){
-//         // console.log('you pressed Edit');
-//         btnSaveNewTask.classList.add('d-none');
-//         btnEditTask.classList.remove('d-none');
-//         btnDeleteTask.classList.remove('d-none');
-//         addNewTaskLabel.innerText="Edit or delete task";
-//     }else if (action==='add'){
-//         btnSaveNewTask.classList.remove('d-none');
-//         btnEditTask.classList.add('d-none');
-//         btnDeleteTask.classList.add('d-none');
-//         addNewTaskLabel.innerText="Add a new task";
-//     }
-// }
-
-
 let noCategory = document.getElementById("nocategory");
 let learning = document.getElementById("learning");
 let eating = document.getElementById("eating");
 let excercise = document.getElementById("excercise");
 let important = document.getElementById("important");
 let notImportant = document.getElementById("notimportant");
+let addTemplateBTN = document.getElementById("addTemplate")
+const btnSaveNewTask = document.getElementById('btnSaveNewTask');
+const btnEditTask = document.getElementById('btnEditTask');
+const btnDeleteTask = document.getElementById('btnDeleteTask');
+const btnShowModalAddNewTask = document.getElementById('btnShowModalAddNewTask');
+const addNewTaskLabel = document.getElementById('staticBackdropLabel');
+const captionField = document.getElementById('caption');
+const descriptionField = document.getElementById('description');
+
+const categories = {
+    0:'No category',
+    1:'Learning',
+    2:'Eating',
+    3:'Exercises',
+    4:'Important',
+    5:'Not important',
+};
+
+
+const categoriesDropDown = document.getElementById('categoriesDropDown'); 
+/* Populate categories on page */
+for (let category in categories){
+    categoriesDropDown.innerHTML+=`<option value="${category}">${categories[category]}</option>`;
+}
 
 function populateLibrary() {
     noCategory.innerHTML = ""
@@ -29,7 +37,8 @@ function populateLibrary() {
     important.innerHTML = ""
     notImportant.innerHTML = ""
     for (const property in templateList) {
-        let templateDOM = `<div class="col-4 border ">
+        console.log(property)
+        let templateDOM = `<div class="col-4 border m-2">
 <!-- Card begin (col) -->
 <div class="col  ">
 
@@ -68,8 +77,7 @@ function populateLibrary() {
 
 </div>`
 
-
-        switch (parseInt(property)) {
+        switch (parseInt(templateList[property].category)) {
             case 0:
                 noCategory.innerHTML += templateDOM
                 addListinerToBTN(`editBTNid${property}`)
@@ -108,22 +116,26 @@ function populateLibrary() {
                 break;
             default:
             // code block
-        
         }
-    
-    }
-    
-        
+    }     
+
 }
 
 populateLibrary()
 
-
 function addListinerToBTN(id) {
-    document.getElementById(id).addEventListener("click", function() {
-        console.log("works")
+    const x = document.getElementById(id)
+    console.log(x)
+    x.addEventListener("click", function() {
+        modalLibrary.toggle()
+        toggleAddModal("edit")
+        let identification = parseInt(id.substring(9))
+        captionField.value = templateList[identification].caption
+        descriptionField.value = templateList[identification].description
+        categoriesDropDown.value = templateList[identification].category
         });
 }
+
 
 function addListinerToDelete(id) {
     document.getElementById(id).addEventListener("click", function() {
@@ -145,14 +157,39 @@ function addListinerToSchedule(id) {
         });
 }
 
+const modalLibrary = new bootstrap.Modal(document.getElementById('modalLibrary'), {keyboard: false});
+
+addTemplateBTN.addEventListener("click", function () {
+    modalLibrary.toggle()
+    toggleAddModal("add")
+});
 
 
-// $('#exampleModal').on('show.bs.modal', function (event) {
-//     var button = $(event.relatedTarget) // Button that triggered the modal
-//     var recipient = button.data('whatever') // Extract info from data-* attributes
-//     // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-//     // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-//     var modal = $(this)
-//     modal.find('.modal-title').text('New message to ' + recipient)
-//     modal.find('.modal-body input').val(recipient)
-//   })
+function toggleAddModal(action) {
+    if (action==='edit'){
+        // console.log('you pressed Edit');
+        btnSaveNewTask.classList.add('d-none');
+        btnEditTask.classList.remove('d-none');
+        addNewTaskLabel.innerText="Edit Task Template";
+    }else if (action==='add'){
+        btnSaveNewTask.classList.remove('d-none');
+        btnEditTask.classList.add('d-none');
+        addNewTaskLabel.innerText="Add Task Template";
+    }
+}
+let idNewTemplate = (Object.keys(templateList)).length
+function addNewTemplate() {
+    let newTemplate = {
+            caption: captionField.value,
+            description: descriptionField.value,
+            category: parseInt(categoriesDropDown.value)
+        }
+    let idNewTemplate = (Object.keys(templateList)).length
+    templateList[idNewTemplate] = newTemplate
+    modalLibrary.toggle() 
+    populateLibrary()
+
+  };
+  
+  btnSaveNewTask.addEventListener('click',addNewTemplate);
+
