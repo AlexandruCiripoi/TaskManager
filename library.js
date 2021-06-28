@@ -5,13 +5,14 @@ let excercise = document.getElementById("excercise");
 let important = document.getElementById("important");
 let notImportant = document.getElementById("notimportant");
 let addTemplateBTN = document.getElementById("addTemplate")
-const btnSaveNewTask = document.getElementById('btnSaveNewTask');
-const btnEditTask = document.getElementById('btnEditTask');
-const btnDeleteTask = document.getElementById('btnDeleteTask');
-const btnShowModalAddNewTask = document.getElementById('btnShowModalAddNewTask');
-const addNewTaskLabel = document.getElementById('staticBackdropLabel');
-const captionField = document.getElementById('caption');
-const descriptionField = document.getElementById('description');
+let btnSaveNewTask = document.getElementById('btnSaveNewTask');
+let btnEditTask = document.getElementById('btnEditTask');
+let btnDeleteTask = document.getElementById('btnDeleteTask');
+let btnShowModalAddNewTask = document.getElementById('btnShowModalAddNewTask');
+let addNewTaskLabel = document.getElementById('staticBackdropLabel');
+let captionField = document.getElementById('caption');
+let descriptionField = document.getElementById('description');
+let hiddenID = document.getElementById('hiddenID');
 
 const categories = {
     0:'No category',
@@ -36,9 +37,9 @@ function populateLibrary() {
     excercise.innerHTML = ""
     important.innerHTML = ""
     notImportant.innerHTML = ""
+    console.log(templateList)
     for (const property in templateList) {
-        console.log(property)
-        let templateDOM = `<div class="col-4 border m-2">
+        let templateDOM = `<div class="col-4 border">
 <!-- Card begin (col) -->
 <div class="col  ">
 
@@ -80,52 +81,41 @@ function populateLibrary() {
         switch (parseInt(templateList[property].category)) {
             case 0:
                 noCategory.innerHTML += templateDOM
-                addListinerToBTN(`editBTNid${property}`)
-                addListinerToSchedule(`scheduleBTNid${property}`)
-                addListinerToDelete(`deleteBTNid${property}`)
                 break;
             case 1:
                 learning.innerHTML += templateDOM
-                addListinerToBTN(`editBTNid${property}`)
-                addListinerToSchedule(`scheduleBTNid${property}`)
-                addListinerToDelete(`deleteBTNid${property}`)
                 break;
             case 2:
                 eating.innerHTML += templateDOM
-                addListinerToBTN(`editBTNid${property}`)
-                addListinerToSchedule(`scheduleBTNid${property}`)
-                addListinerToDelete(`deleteBTNid${property}`)
                 break;
             case 3:
                 excercise.innerHTML += templateDOM
-                addListinerToBTN(`editBTNid${property}`)
-                addListinerToSchedule(`scheduleBTNid${property}`)
-                addListinerToDelete(`deleteBTNid${property}`)
                 break;
             case 4:
                 important.innerHTML += templateDOM
-                addListinerToBTN(`editBTNid${property}`)
-                addListinerToSchedule(`scheduleBTNid${property}`)
-                addListinerToDelete(`deleteBTNid${property}`)
+
                 break;
             case 5:
                 notImportant.innerHTML += templateDOM
-                addListinerToBTN(`editBTNid${property}`)
-                addListinerToSchedule(`scheduleBTNid${property}`)
-                addListinerToDelete(`deleteBTNid${property}`)
+
                 break;
             default:
             // code block
+            
         }
-    }     
 
+    }     
+    for (const property in templateList){
+        addListinerToBTN(`editBTNid${property}`)
+        addListinerToSchedule(`scheduleBTNid${property}`)
+        addListinerToDelete(`deleteBTNid${property}`)
+    }  
 }
 
 populateLibrary()
 
 function addListinerToBTN(id) {
     const x = document.getElementById(id)
-    console.log(x)
     x.addEventListener("click", function() {
         modalLibrary.toggle()
         toggleAddModal("edit")
@@ -133,14 +123,14 @@ function addListinerToBTN(id) {
         captionField.value = templateList[identification].caption
         descriptionField.value = templateList[identification].description
         categoriesDropDown.value = templateList[identification].category
+        hiddenID.innerHTML = `${identification}`
         });
 }
 
 
 function addListinerToDelete(id) {
     document.getElementById(id).addEventListener("click", function() {
-        let identification = parseInt(id.substring(11))
-        
+        let identification = parseInt(id.substring(11)) 
         delete templateList[identification]
         console.log(templateList)
         populateLibrary()
@@ -193,3 +183,14 @@ function addNewTemplate() {
   
   btnSaveNewTask.addEventListener('click',addNewTemplate);
 
+  btnEditTask.addEventListener("click", () => {
+    let newTemplate = {
+            caption: captionField.value,
+            description: descriptionField.value,
+            category: parseInt(categoriesDropDown.value)
+        }
+    templateList[hiddenID.innerHTML] = newTemplate
+    modalLibrary.toggle() 
+    populateLibrary()
+
+  })

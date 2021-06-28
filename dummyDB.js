@@ -1,37 +1,47 @@
 let templateList={
     0:{ 
-        caption:'some caption', 
-        description:'some description',
+        caption:'Buy present for friend', 
+        description:'Buy a book or something fot the upcoming birthday',
         category:0,
     },
     1:{ 
-        caption:'lalalal', 
-        description:'lalalala',
+        caption:'Recap React', 
+        description:'Going over the stuff that is unclear in react',
         category:1,
     },
     2:{ 
-        caption:'some caption', 
-        description:'some description',
-        category:2,
-    },
-    3:{ 
-        caption:'ggggggggg', 
-        description:'gggggggggg',
+        caption:'Swimming', 
+        description:'Book a spot at the pool',
         category:3,
     },
+    3:{ 
+        caption:'Buy bread', 
+        description:'Out of brad again!?!',
+        category:2,
+    },
     4:{ 
-        caption:'34546576898', 
-        description:'34234578',
+        caption:'Pay rent', 
+        description:'Send the money to the landloard',
         category:4,
     },
     5:{ 
-        caption:'233545475869', 
-        description:'2435467687',
+        caption:'Sleep sometimes', 
+        description:'No sleep till Brooklyn',
         category:5,
     },
     6:{ 
-        caption:'kjhgfds', 
-        description:'fghjkjhgfd',
+        caption:'Buy JS Book', 
+        description:'Research for the best JS book to buy',
+        category:1,
+    },
+    7:{ 
+        caption:'Buy snacks and wine', 
+        description:'Buy snacks and wine for dinner with friends',
+        category:2,
+    },
+    8:{ 
+        caption:'Understand classes', 
+        description:'Find material to better understand classes',
         category:1,
     },
 };
